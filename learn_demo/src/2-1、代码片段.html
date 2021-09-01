@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="" id="app"></div>
+
+    <script src="../js/vue.global.js"></script>
+
+    <template id="my-app">
+        <div>{{message}}</div>
+    </template>
+    <script>
+        const obj = {
+            template: '#my-app',
+            data() {
+                return {
+                    message: "hellow world"
+                }
+            },
+            methods: {
+
+            },
+        }
+        const app = Vue.createApp(obj)
+        app.mount('#app')
+
+    </script>
+
+   
+</body>
+
+</html>
+
+vue
+
+<script>
+    // 生成代码片段步骤：文件-首选项-代码片段-选择html
+    // 代码片段网站：https://snippet-generator.app/?description=&tabtrigger=&snippet=&mode=vscode
+    // 粘贴要生成的代码，起名，拷贝右侧，粘贴到选择html的那个对象里，保存
+</script>

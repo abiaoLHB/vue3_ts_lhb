@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <!-- 模板写法一 -->
+    <script type="x-template" id="lhb">
+        <div>vue计数器模板写法1-lhb</div>
+        <h2>lhb</h2>
+        <h2>{{counter}}</h2>
+        <h2>{{message}}</h2>
+        <button @click="increment">+1</button>
+        <button @click="deincrement">-1</button>
+    </script>
+
+
+    <!-- 计数器-Vue -->
+    <div id="app"></div>
+    <template id="lhb2">
+        <div>vue计数器模板写法2-lhb</div>
+        <h2>lhb</h2>
+        <h2>{{counter*2}}</h2>
+        <h2 v-once>{{counter*2}}</h2>
+
+        <div v-once>
+            <div>{{message}}</div>
+            <div>{{counter}}</div>
+        </div>
+
+
+        <h2>{{message}}</h2>
+        <p>{{fun()}}</p>
+        <p>{{isShow?'哈哈':''}}</p>
+        <button @click="increment">+1</button>
+        <button @click="deincrement">-1</button>
+
+        <div>
+            <p>v-text用法</p>
+            <span v-text="message">嘿嘿</span>
+            <!-- 等价于 ，只是下面这个写法更灵活-->
+            <span>{{message}}</span>
+
+            <p>v-html:解析html内容</p>
+            <span v-html="rich">{{rich}}</span>
+            <span>{{rich}}</span>
+
+            <p>v-pre用法：跳过元素和它子元素编译过程，显示原始mustach标签,就是希望不解析</p>
+            <div v-pre>
+                <div>{{message}}</div>
+                <div>{{counter}}</div>
+                <a :href="message">a</a>
+            </div>
+
+            <!-- v-bind -->
+            <img v-bind:src="message" alt="">
+            <img :src="counter" alt="">
+
+            <!-- 绑定class-对象语法 -->
+            <div :class="{'active':isShow,'title':true}">bind-class,加引号</div>
+            <div :class="{active:isShow,title:true}">bind-class，不加引号</div>
+            <div :class="classObj">绑定data对象</div>
+            <div :class="classfun()">绑定函数</div>
+            <div :class="computer">计算属性</div>
+            <div :class="['abc',isShow ? 'showa':'noshouw',message,{'showclass':isShow}]">数组语法</div>
+        </div>
+
+    </template>
+    <!-- 本地引入 -->
+    <script src="../js/vue.global.js"></script>
+
+    <script>
+        const obj = {
+            template: "#lhb2",
+            data: function () {
+                return {
+                    message: 'hellow',
+                    counter: 100,
+                    isShow: true,
+                    rich: "<div>rich</div>",
+                    classObj: {
+                        active: true,
+                        light: true
+                    }
+                }
+            },
+            computed: {
+                computer: function () {
+                    return this.message + 'haa'
+                }
+            },
+            methods: {
+                increment() {
+                    this.counter++
+                    console.log(this)
+                },
+                // deincrement() {
+                //     this.counter--
+                // }
+
+                // 不能使用箭头函数，这里箭头函数里的this是window
+                deincrement: () => {
+                    console.log(this)
+                    this.counter--
+                },
+                fun() {
+                    console.log("模板语法可以调用函数")
+                },
+                classfun() {
+                    return {
+                        fun: true
+                    }
+                }
+            },
+
+        }
+        Vue.createApp(obj).mount("#app")
+    </script>
+
+    <script>
+    </script>
+    <script>
+
+        // 1、methods里不能使用箭头函数：因为箭头函数没有自己的this
+        // this是谁呢？ this是pulicThis =》 instance.proxy
+        // 这个this指向在source\packages\runtime-core\src 544行
+
+        // 模板语法就是双大括号语法 {{}}，mustache
+        // 1、{{}}里可以放变量，
+        // 2、也可以放表达式
+        // 3、还可以调用函数
+        // 4、可以使用计算属性
+        // 5、三元运算符
+
+        // 错误用法
+        // {{var a = 'abd'}} //赋值语句 不行
+        // {{if(isShow){return '嘿嘿'}}} //不行
+    </script>
+</body>
+
+</html>
