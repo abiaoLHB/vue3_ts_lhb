@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- 计数器原生 -->
+    <div>原生计数器</div>
+    <div class="counter"></div>
+    <button class="increment">+1</button>
+    <button class="decrement">-1</button>
+    <script>
+        // 获取所有用到的元素
+        let counterEl = document.querySelector(".counter")
+        let incrementEl = document.querySelector('.increment')
+        let decrementEl = document.querySelector('.decrement')
+        let counter = 0
+        counterEl.innerHTML = counter
+        incrementEl.addEventListener('click', function () {
+            counter += 1
+            counterEl.innerHTML = counter
+        })
+
+        decrementEl.addEventListener('click', function () {
+            counter -= 1
+            counterEl.innerHTML = counter
+        })
+    </script>
+
+    <!-- 计数器-Vue -->
+
+
+    <div id="app"></div>
+
+    <!-- 模板写法二：template标签，浏览器不会直接渲染，它是用来被JavaScript代码读取的 -->
+    <!-- 不用template也行，用div也是可以的，但是会被浏览器渲染一次 -->
+    <template id="lhb2">
+        <div>vue计数器模板写法2-lhb</div>
+        <h2>lhb</h2>
+        <h2>{{counter}}</h2>
+        <h2>{{message}}</h2>
+        <button @click="increment">+1</button>
+        <button @click="deincrement">-1</button>
+    </template>
+
+    <!-- cdn -->
+    <!-- <script src="https://unpkg.com/vue@next"></script> -->
+
+    <!-- 本地引入 -->
+    <script src="../js/vue.global.js"></script>
+
+    <!-- 模板写法一 -->
+    <script type="x-template" id="lhb">
+        <div>vue计数器模板写法1-lhb</div>
+        <h2>lhb</h2>
+        <h2>{{counter}}</h2>
+        <h2>{{message}}</h2>
+        <button @click="increment">+1</button>
+        <button @click="deincrement">-1</button>
+    </script>
+    <script>
+
+        const obj = {
+            // template:`<h2>hello world</h2>`
+
+            // 模板普通写法
+            // template: `
+            //           <div>vue计数器</div>
+            //         <h2>0</h2>
+            //         <h2>{{counter}}</h2>
+            //         <h2>{{message}}</h2>
+            //         <button @click="increment">+1</button>
+            //         <button @click="deincrement">-1</button>
+            //     `,
+
+            // 模板 x-template
+            // template: "#lhb", //这种写法，就是内部转换成document.querySelector('#lhb')
+            template: "#lhb2", //这种写法，就是内部转换成document.querySelector('#lhb')
+            // data:{}//vue不允许写对象，必须是函数
+            data: function () {
+                return {
+                    message: 'hellow',
+                    counter: 100
+                }
+            },
+            methods: {
+                increment() {
+                    this.counter++
+                },
+                deincrement() {
+                    this.counter--
+                }
+            },
+
+        }
+        // 方式1
+        // const app = Vue.createApp(obj)
+        // app.mount("#app")
+
+        // 方式2 -直接使用返回值，链式
+        Vue.createApp(obj).mount("#app")
+    </script>
+
+    <script>
+        // 读音：view
+        // 渐进式框架-表示我们可以在项目中一点点来引入和使用vue，而不一定需要全部使用vue来开发整个项目
+
+        // 前端地位 
+            // Angular-门槛高，占有率较低，不否认优秀。和 nest.js比较像，TS开发
+            // React-占有率高，大厂用的比较多，前端必会的！
+            // Vue-国内占有率最高，所有前端必会
+            // npm下载量 React > Vue > Angular
+            // star数 Vue > React > Augular
+
+        // Vue3-2020年9月19日正式发布，命名为""One Piece"
+        // 新特性：更好的性能，更小的包体积，更好的Ts集成，更优秀的API设计
+        // 2021年第二季度，vue3已经成为Vue Cli的默认版本了
+        // AntDesignVue、ElementPlus已经支持Vue3了 
+
+        // Vue3的变化
+        // - 源码通过monorepo的形式来管理源代码
+                // -- mono：单个
+                // -- Repo：repository仓库
+                // 主要是将许多项目的代码存储在同一个repository中
+                // 目的是多个包本身项目独立，可以有自己的功能逻辑、单元测试，同时又在同一个仓库下，方便管理
+                // 模块划分更加清晰，可维护性、可扩展性更强
+        // - 通过TS进行重写
+                // Vue2.x，vue使用Flow来进行类型检测
+                // Vue3.x,源码全部使用TS重构，Vue本身对ts的支持也更好
+        // 使用Proxy进行数据劫持
+                // Vue2使用Object.defineProperty来劫持数据的getter和setter
+                // 这种方式有缺陷，当给对象添加或者删除属性时，无法劫持和监听
+                // 对这种情况，不得不提供一些特殊API，比如$set、$delete,都是一些hack
+        // Vue3删除了一些不必要的API-$on,$off,$once
+        // 移除了一些特性，如filter、内联模板
+        // 编译方面的优化
+            // - 生成BlockTree、slot编译优化、diff算法优化
+
+        // 带来新的APi：Options APi =》 Conposition APi
+
+        // 通过Hooks函数增加代码的复用性
+            //  - vue2通过Mixin共享公共逻辑，存在命名冲突
+
+        // CDN，内容分发网络-》通过相互连接的网络系统，利用最靠近每个用户的服务器，将内容发送给用户 
+
+        // 使用vue3， cdn引入-自己下载引入-npm安装-vuecli脚手架
+
+
+        // Vue.createApp({}) 传入的对象属性说明
+        // template属性：表示的是Vue需要帮我们渲染的模板信息，里面的内容（标签）会替换掉挂载到的元素
+        // 两种放是可以把不方便的template写法给抽出去
+        // 1、x-template + id
+        // 2、在body里直接写template标签
+
+        // data属性：定义响应式数据
+        // methods:定义很多方法
+
+        // this问题：this就是vue实例
+
+        // vue3源码调试：如果下载的是zip包，可能跑不起来，这时候要
+        // git init , git add . ,git commit -m "xx"
+        // commit时可能有hook，需要 git commit -m "fix(install): 空格后写信息"
+
+        // 调试源码1 ： 
+        // 1、在源码目录下安装依赖:yarn install
+        // 2、开始调试：yarn dev
+        // 3、执行该命令后 ，vue会把packages里的文件打包成vue.global.js，放在packages/vue/dist目录下
+        // 4、这时候再examples里新建自己的文件夹和html文件，引入vue.global.js就行了
+        // 5、这种方式是在vue.global.js这个大文件里调试的，所有的函数都在这个js里面，不够清晰。
+        
+        
+        // 调试源码2 ：
+        // 1、在源码的package.json里的dev命令后面，添加 --sourcemap
+        // 2、"dev": "node scripts/dev.js", => "dev": "node scripts/dev.js --sourcemap",
+        // 3、重新yarn dev后，生成了代码映射，可以把某行代码，映射到某个文件的某行，就是可以对应起来
+   </script>
+    <script>
+
+    </script>
+</body>
+
+</html>
