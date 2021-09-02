@@ -80,6 +80,21 @@
             <!-- 动态绑定属性名称 -->
             <div :[name]="value">动态绑定属性名称</div>
 
+            <!-- 直接绑定一个对象 -->
+            <div v-bind="info"> 直接绑定对象</div>
+            <!-- 效果 -->
+            <!-- <div name="lhb" age="18"> 直接绑定对象</div> -->
+            
+
+            <div>v-on的基本使用</div>
+            <button @click="btnclick">btn1-btnclick</button>
+
+            <div @mousemove="mousemove">mousemove</div>
+
+            <!-- 传递参数 和 修饰符-->
+            <div @click.stop="btn2($event,18)">传递参数</div>
+            <div @click.prevent="btn2($event,18)">传递参数</div>
+            <input type="text" @keyup.enter="enter">
         </div>
 
     </template>
@@ -106,7 +121,11 @@
                         fontSize: '20px'
                     },
                     name: 'divAttr',
-                    value:'lhb'
+                    value:'lhb',
+                    info:{
+                        name:"lhb",
+                        age:18
+                    }
                 }
             },
             computed: {
@@ -140,6 +159,18 @@
                     return {
                         color: 'blue'
                     }
+                },
+                btnclick(){
+                    console.log('btnclick')
+                },
+                mousemove(){
+                    console.log("mousemove")
+                },
+                btn2(event,age){
+                    console.log("btn2---",event,age)
+                },
+                enter(){
+                    console.log('enter了---------')
                 }
             },
 
