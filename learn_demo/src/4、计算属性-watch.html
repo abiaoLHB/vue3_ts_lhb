@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="" id="app"></div>
+
+    <script src="../js/vue.global.js"></script>
+
+    <template id="my-app">
+        <div>案例1</div>
+        <div>{{funnName}}</div>
+        <div>{{scoreText}}</div>
+        <div>{{newMessage}}</div>
+        <div>{{newMessage}}</div>
+        <div>{{newMessage}}</div>
+        <div>{{getnewMessage()}}</div>
+        <div>{{getnewMessage()}}</div>
+        <div>{{getnewMessage()}}</div>
+
+        <div>
+            您的问题: <input type="text" v-model="qustion">
+            <button @click="getAnster">寻找答案</button>
+        </div>
+        <div>{{info}}</div>
+    </template>
+    <script>
+        const obj = {
+            template: '#my-app',
+            data() {
+                return {
+                    firstName: "Kobe",
+                    lastName: "Bryant",
+                    score: 80,
+                    message: "hello World",
+                    // 侦听到qustion的变化时，进行一些逻辑处理，比如网络请求
+                    qustion: 'hah',
+                    anster: '',
+                    info: {
+                        name: 'lhb',
+                        age: 18
+                    }
+                }
+            },
+            mounted() {
+                setTimeout(() => {
+                    this.funnName = "luo"
+                    // this.info.name="wsh"
+                    // this.info = { name: 'kebo' } //可以侦听到
+
+                    this.info.name = "hahahh" //没监听到,默认情况下，只能监听数据本身的改变，内部数据监听不到
+
+
+                    //其他用法2 使用api来侦听,返回一个取消函数
+                   const unwatch =  this.$watch("info",(val,oldValue)=>{
+                        console.log("api-侦听")
+                    },{
+                        deep:true,
+                        immediate:true
+                    })
+
+                    // 取消侦听器
+                    unwatch()
+
+                }, 1000)
+            },
+            methods: {
+                getnewMessage() {
+                    // console.log("方法调用-----")
+                    return this.message.split('').reverse().join('')
+                },
+                getAnster() {
+                    console.log(`您的问题${this.message}的答案是哈哈哈`)
+                },
+                watchInfo(newValue, oldValue) {
+                    console.log('watch-info-fun')
+                },
+                handler1(val, oldVal) {
+                    console.log('handler1-----', val, oldVal)
+                }
+
+            },
+            // 侦听器、监听器,data发生变化时，做一些逻辑处理
+            watch: {
+                // newValue 变化后的新值
+                // oldValue 变化前的值
+                qustion(newValue, oldValue) {
+                    // console.log('新值',newValue)
+                    // console.log('旧值',oldValue)
+                    this.getAnster()
+                },
+                // 监听器选项
+                // info(newValue,oldValue){
+                //     console.log('info变了')
+                // },
+
+                // 深度侦听，后面跟对象+handler+必须加deep，不加deep就是上面写法的语法糖（不能深度侦听）
+                // 这种第一次是不会执行的，因为没有任何数据发生改变
+                // info: {
+                //     handler: function (newValue, oldValue) {
+                //         console.log('info变了')
+                //     },
+                //     deep:true
+                // },
+
+                // 深度侦听-第一次就执行，也就是立即执行一次.必须加immediate:true
+                // info: {
+                //     handler: function (newValue, oldValue) {
+                //         console.log('info变了')
+                //     },
+                //     deep:true,
+                //     immediate:true
+                // },
+
+                // 其他用法1-字符串方法，就是侦听时，调用methods里的方法
+                // info: 'watchInfo'
+
+                // 传入函数，逐一调用
+                // info: [
+                //     "handler1",
+                //     function handler2(val, olcVal) {
+                //         console.log('handler2---')
+                //     },
+                //     {
+                //         handler: function (val, oldVal) {
+                //             console.log('handler3-----')
+                //         },
+                //         deep:true //深度侦听时，只会走这里，其他函数是数据本身改变
+                //     }
+                // ],
+
+                // 侦听某个属性的改变
+                // "info.name": function (val, oldValue) {
+                //     console.log("namebianle")
+                // }
+
+
+
+
+            },
+
+            computed: {
+                // 定意一个计算属性，fullname，可以像使用data一样使用
+                // 还有缓存
+                // 看着像函数，其实是个fullname的getter方法..一般只写getter就够了
+                // 源码里会判断传入的事函数吗，是函数，则直接绑定pulicthis，如果是个对象，则取对象的get属性，然后绑定publicthis
+                // funnName() {
+                //     console.log("计算属性调用-----")
+                //     return this.firstName + this.lastName
+                // },
+                // 等效于下面写法（语法糖）
+                // funnName: {
+                //     get: function () {
+                //         return this.firstName + this.lastName
+                //     }
+                // },
+
+                funnName: {
+                    get: function () {
+                        return this.firstName + this.lastName
+                    },
+                    set: function (newValue) {
+                        console.log('newValue', newValue)
+                    }
+                },
+                scoreText() {
+                    return this.score >= 60 ? '及格了' : '不及格了'
+                },
+                newMessage() {
+                    return this.message.split('').reverse().join('')
+                }
+            }
+        }
+        const app = Vue.createApp(obj)
+        app.mount('#app')
+
+    </script>
+
+
+</body>
+
+</html>
