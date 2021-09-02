@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="" id="app">
+    </div>
+
+    <script src="../js/vue.global.js"></script>
+
+    <template id="my-app">
+        <div v-if="0">{{message}}</div>
+        <div v-else>{{message}}+00</div>
+        <input type="text" v-model="score">
+        <div v-if="score>=90">优秀</div>
+        <div v-else-if="score>=60">良好</div>
+        <div v-else>不及格</div>
+
+        <!-- 比div好点，少个元素，因为template压根不显示 -->
+        <template v-if="1">
+            <div>哈哈哈</div>
+            <div>哈哈哈</div>
+            <div>哈哈哈</div>
+        </template>
+        <template v-else>
+            <div>呵呵呵</div>
+            <div>呵呵呵</div>
+            <div>呵呵呵</div>
+        </template>
+
+        <template >
+            <div>
+                templa默认不渲染
+            </div>
+        </template>
+
+        <!-- v-show不支持template -->
+        <!-- v-show不可以和v-else使用 -->
+        <div v-show='isShow'>
+            templa默认不渲染222
+        </div>
+
+
+        <!-- 列表渲染 -->
+        <ul>
+            <li v-for="item in 10" :key="index">{{item}}</li>
+        </ul>
+
+        <ul>
+            <li v-for="(value,key,index) in info">{{value}}--{{key}}--{{index}}</li>
+        </ul>
+
+        <!-- 插入F元素 -->
+        <ul>
+            <li v-for="item in letters" :key="index">{{item}}</li>
+        </ul>
+        <button @click="insertF">插入F</button>
+
+    </template>
+    <script>
+        const obj = {
+            template: '#my-app',
+            data() {
+                return {
+                    message: "hellow world",
+                    score: 30,
+                    isShow:true,
+                    info:{
+                        name:'lhb',
+                        age:18
+                    },
+                    letters:["a","b","c","d"]
+                }
+            },
+            methods: {
+                insertF(){
+                    this.letters.splice(2,0,'F')
+                }
+            },
+        }
+        const app = Vue.createApp(obj)
+        app.mount('#app')
+
+    </script>
+
+    <script>
+        // vnode-virtua node 虚拟节点，本事是个js对象，用来描述真实节点
+        // template -》 vnode（可以做跨平台） => 真实Dom
+        
+        // vfor时，有key 用 pathKeyedchildren方法
+        // vfor时，没有key时 用 pathUnKeyedchildren方法
+        // :key="唯一"，用index不会提高性能，只是消除了警告
+        // 源码在 render.ts-> patchchildren
+
+        // 这一节最后 ，详细讲了key的源码
+
+    </script>
+</body>
+
+</html>
