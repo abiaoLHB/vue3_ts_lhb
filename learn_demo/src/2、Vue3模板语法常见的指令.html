@@ -69,6 +69,17 @@
             <div :class="classfun()">绑定函数</div>
             <div :class="computer">计算属性</div>
             <div :class="['abc',isShow ? 'showa':'noshouw',message,{'showclass':isShow}]">数组语法</div>
+
+            <!-- 绑定style -->
+            <div :style="{color:redColor,'font-size':size,fontSize:size}">绑定style</div>
+            <div :style="styleObj">style-obj</div>
+            <div :style="getstyle()">style-fun</div>
+            <div :style="[getstyle(),styleObj]">style-数组语法</div>
+
+
+            <!-- 动态绑定属性名称 -->
+            <div :[name]="value">动态绑定属性名称</div>
+
         </div>
 
     </template>
@@ -87,7 +98,15 @@
                     classObj: {
                         active: true,
                         light: true
-                    }
+                    },
+                    redColor: '#ff0000',
+                    size: '14px',
+                    styleObj: {
+                        background: 'red',
+                        fontSize: '20px'
+                    },
+                    name: 'divAttr',
+                    value:'lhb'
                 }
             },
             computed: {
@@ -115,6 +134,11 @@
                 classfun() {
                     return {
                         fun: true
+                    }
+                },
+                getstyle() {
+                    return {
+                        color: 'blue'
                     }
                 }
             },
