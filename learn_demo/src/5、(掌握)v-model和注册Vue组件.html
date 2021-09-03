@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="" id="app"></div>
+    <script src="../js/vue.global.js"></script>
+    <template id="my-app2">
+        <div style="background-color: pink;">
+            {{obj2}}
+
+            <component-a></component-a>
+        </div>
+    </template>
+    <div id="app2"></div>
+
+
+    <template id="my-app">
+        <!-- 单向绑定 -->
+        <!-- <input type="text" :value="message"> -->
+
+        <!-- 双向绑定 用了两部操作1、绑定value 2、监听输入时间，改变value绑定的值-->
+        <!-- <input type="text" :value="message" @input='inputChange'> -->
+
+        <!--1、 绑定input -->
+        <!-- vue的双向绑定，就是上面写法的语法糖.源代码在 runtime_dom src directives vModel.ts 里47行 -->
+        <!-- @input -->
+        <input type="text" v-model="message">
+        <!-- @change -->
+        <input type="text" v-model.lazy="message">
+
+        <!-- 以上给message复制是，默认一直都是string类型 -->
+        <!-- 用。number修饰符可以改成数字类型 -->
+        <input type="text" v-model.number="message">
+        <!--2、 绑定textarea -->
+        <label for="intro">自我接受</label> <textarea v-model="intro" name="intro" id="intro" cols="10"
+            rows="10"></textarea>
+
+        <!--3、 绑定checkbox -单选 -->
+        <label for="checkbox">同意协议</label>
+        <input id="checkbox" type="checkbox" v-model="isAgree" />
+
+        <br>
+        <!-- 4、绑定checkbox -多选 -v-model绑定到同一个数组，必须写value，会把选中的value放入数组 -->
+        <div>
+            <p>爱好</p>
+            <label for="lanqiu">篮球</label>
+            <input id="lanqiu" type="checkbox" v-model="aihao" value="篮球">
+            <label for="zuqiu">足球</label>
+            <input id="zuqiu" type="checkbox" v-model="aihao" value="足球">
+            <label for="wagnqiu">网球</label>
+            <input id="wagnqiu" type="checkbox" v-model="aihao" value="网球">
+        </div>
+
+        <!-- 5、绑定radio-单选 -->
+        <div>
+            <span>性别</span>
+            ： <label for="man">男
+                <input id="man" type="radio" v-model="sex" value="man" />
+            </label>
+            <label for="women">女
+                <input id="women" type="radio" v-model="sex" value="women" />
+            </label>
+
+        </div>
+
+        <!-- 6、绑定select 单选 -->
+        <!-- <label for="">选择水果</label>
+        <select name="" id="" v-model="fruit">
+            <option value="apple">苹果</option>
+            <option value="orange">橘子</option>
+            <option value="banner">香蕉</option>
+        </select> -->
+        <!-- 7、绑定select 多选 -->
+        <label for="">选择水果</label>
+        <!-- size - select的高度 -->
+        <select v-model="fruit" multiple size="5">
+            <option value="apple">苹果</option>
+            <option value="orange">橘子</option>
+            <option value="banner">香蕉</option>
+        </select>
+
+        <div>性别水果：{{fruit}}</div>
+        <div>性别选择：{{sex}}</div>
+        <div>爱好：{{aihao}}</div>
+        <div>{{message}}</div>
+        <div>{{intro}}</div>
+        <div>{{isAgree}}</div>
+
+
+
+        <component-a></component-a>
+        <component-a></component-a>
+        <component-a></component-a>
+        <component-a></component-a>
+        <component-a></component-a>
+
+        <part-a></part-a>
+    </template>
+
+    <template id="comn">
+        <div>
+            <div>我是组件111{{compa}}</div>
+        </div>
+    </template>
+    <script>
+        const obj = {
+            template: '#my-app',
+            // 这是局部注册,通过components属性，添加对象，对象里包含键值对，键是组件名，值是组件内容
+            components: {
+                PartA: {
+                    template: `<div>我是局部组件{{part}}</div>`,
+                    data() {
+                        return {
+                            part: "A"
+                        }
+                    }
+                }
+            },
+            data() {
+                return {
+                    message: "hellow world",
+                    intro: '',
+                    isAgree: true,
+                    aihao: [],
+                    // sex: 'man' //值相同默认选中
+                    sex: '',
+                    // fruit:'apple'//有相同的值，就是默认值
+                    fruit: ''
+                }
+            },
+            methods: {
+                inputChange(event) {
+                    this.message = event.target.value
+                }
+            },
+        }
+        const app = Vue.createApp(obj)
+
+        // 这是全局注册
+        // 定义组件名建议使用帕斯卡命名法
+        // 使用组件时，建议使用短横线
+        app.component('ComponentA', {
+            template: `#comn`,
+            data() {
+                return {
+                    compa: '哈哈'
+                }
+            }
+        })
+
+        app.mount('#app')
+
+
+        let obj2 = {
+            template:'#my-app2',
+            data(){
+                return{
+                    obj2:"第二个vue实例"
+                }
+            }
+        }
+        const app2 = Vue.createApp(obj2)
+        app2.mount("#app2")
+
+    </script>
+
+
+</body>
+
+</html>

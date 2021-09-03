@@ -48,6 +48,22 @@
                     }
                 }
             },
+            created() {
+                // 1、引用类型，没啥好说的
+
+                // 2、浅拷贝 
+                let info = { name: 'lhb', friend: { age: 20 } }
+                let obj = Object.assign({}, info)
+                info.name = 'wsh'
+
+                console.log(info)
+                console.log(obj) //obj.name = 'lhb' ,浅拷贝，可以烤第一层
+
+                info.friend.age = 30
+                console.log(obj) // obj.friend.age = 30 了，内层对象还是引用
+
+                // 深拷贝  Json 、deepclone方法，借助lodsh库也可以
+            },
             mounted() {
                 setTimeout(() => {
                     this.funnName = "luo"
@@ -58,11 +74,11 @@
 
 
                     //其他用法2 使用api来侦听,返回一个取消函数
-                   const unwatch =  this.$watch("info",(val,oldValue)=>{
+                    const unwatch = this.$watch("info", (val, oldValue) => {
                         console.log("api-侦听")
-                    },{
-                        deep:true,
-                        immediate:true
+                    }, {
+                        deep: true,
+                        immediate: true
                     })
 
                     // 取消侦听器
@@ -102,6 +118,7 @@
 
                 // 深度侦听，后面跟对象+handler+必须加deep，不加deep就是上面写法的语法糖（不能深度侦听）
                 // 这种第一次是不会执行的，因为没有任何数据发生改变
+                // 深度监听 新值和旧值相同，因为指向同一个引用对象
                 // info: {
                 //     handler: function (newValue, oldValue) {
                 //         console.log('info变了')
@@ -181,6 +198,7 @@
         app.mount('#app')
 
     </script>
+
 
 
 </body>
