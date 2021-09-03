@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 1、安装webpack，webpack-cli（作用是读取命令行中的参数，在使用脚手架时，webpack-cli不是必须要安装的）
+        // 当不使用脚手架，而是直接用webpack命令,命令行时打包文件时，才会用到webpack-cli
+
+        // 安装 用管理员权限的cmd装
+        // npm install webpack webpack-cli -g  //全局安装
+        // npm install webpack webpack-cli -D  //局部安装
+
+        // 指定精确版本  用管理员权限的cmd装
+        // npm install webpack@5.37.1 webpack-cli@4.7.0 -g
+
+        // webpack --version，webpack --version 查看版本号 
+
+        // 使用
+        // 直接打包 ： webpack，会多一个dist文件夹（此时用的是全局webpack）
+
+        // 尽量使用局部安装的webpack，因为如果有多个项目，而每个项目依赖的webpack版本不同
+        // 这时候用全局webpack打包可能会有兼容性问题
+
+        // 局部安装：在某个项目根目录下，用package.json管理包
+        // 没有package.json可以用npm init 来生成这个json  
+        // npm init // 需要选择每个选项
+        // npm init -y //一下生成文件，就是后面一路yes的意思  
+
+        // npm install webpack webpack-cli //这时候不加-g其实就是局部安装，
+        // 局部安装又分为依赖环境 --save-dev（简写 -D）是开发环境使用，--save是生成环境使用
+
+        // 全局安装的版本
+        // webpack ： webpack 5.37.1
+        // webpack-cli: webpack-cli 4.7.0
+
+        // 局部安装的版本：
+        // webpack ： webpack 5.38.0
+        // webpack-cli: webpack-cli 4.7.2
+
+        // 本次测试，局部安装版本要高于全局安装的，但是带项目里，如果用命令行工具打包，使用的依然
+        // 全局的webpack。要想使用局部的命令，需要使用node_modules下.bin 的webpack命令
+
+        // 使用局部webpack方式1
+        // .\node_modules\.bin\webpack  这样使用
+
+        // 使用局部webpack方式2
+        // npx webpack  这样使用，优先使用本地webpack，并且会去ndoe_modules里找可执行命令
+
+        // 使用局部webpack方式3 - 使用packjson的脚本执行打包命令，使用脚本时，就不需要使用npx了，会自动
+        // 去node_moduls里找执行命令，使用的也是局部
+        // 比如:"scripts": {
+                        // "tet": "echo \"Error: no test specified\" && exit 1",
+                        // "build": "webpack"
+                     //   },
+            // 执行脚本 ：npm run build
+
+
+        // 默认打包过程：在当前目录下，默认知道src目录里的index.js当做入口，然后递归
+        // 找到里面的依赖去打包。测试：把index.js改成main.js,就会报一堆错误 Can't resolve './src' in
+        // 如果不想按默认打包，可以在打包指令中加入入口命令  npx webpack --entry ./src/main.js  可以打包成功
+        // 如果不想按默认打包，可以在打包指令中加入入口、出口命令  npx webpack --entry ./src/main.js --output-path ./build  可以打包成功
+    
+        // 不想用npx了，命令太长，可以用npm run ,把参数写到脚本里
+        // 这样写还是鸡肋，真实开发，是在项目根目录下用webpack.config.js文件做配置，自动读取，文件名是固定的，非得起其他名字，需要特殊指定
+        
+        // 如果不适用默认文件名字，比如webpack.config.js -》lhb.config.js ,需要再脚本命令里指定
+        //  "build": "webpack --config lhb.config.js"
+
+        // 打包css 新加element.js.如果不使用这个文件，webpack是不会打包的.只有从入口开始，依赖了哪些文件，才会打包
+        // 此时打包回报错，因为webpack不认识css文件   
+        // in ./src/css/style.css 1:0
+        // Module parse failed: Unexpected token (1:0)
+        // You may need an appropriate loader to handle this file type, currently no loaders are configured to process this file. See https://webpack.js.org/concepts#loaders
+
+        // loader可以对模块源代码进行解析，相当于一个翻译官，翻译成webpack可以认识的资源。需要安装loader
+
+        //  npm install css-loader -D  安装后依然报错，需要再webpack.config.js里配置 这个laoder只解析和加载，不会插入页面
+        // 意思就是不会引入真实的css文件，比如<link src="xxx.css"><link/> 后者 <style>xxx</style>
+
+        // 此时需要再使用 style-laoder，这个loader会创建一个style标签，把css插入进去。但是没做提取，是直接放在html的head里的，提取需要使用插件
+
+
+        // 处理less : 写less代码，浏览器是不认识的，需要转成最普通的css，需用通过lessc（less complier，和webpack没关系
+        // 是一个独立工具）工具来转化，需要安装less，装了less，也就有了lessc。
+        // 安装局部 ： npm install less -D 。安装完后 在.bin里就有了lessc，可以凑到
+        // 可以用npx来执行转化  npx就是用来去.bin里找可以行命令的
+        // 在要转换的less文件目录下 执行 npx lessc ./title.less demo.css
+
+        // 用webpack 处理less ：npm install less-loader -D
+
+        // postCss
+        // 通过js来转换样式的工具
+        // 可以帮我们进行css的转换和适配，比如自动添加浏览器前缀、css样式的重置
+        // 可以单独使用，可以安装loader。单独使用略
+        // npm install postcss-loader -D
+        
+        // 用postcss-preset-env 代替autoprefixer 
+        // npm install postcss-preset-env -D
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,6 @@
+.title{
+    color: blue;
+    user-select: none;
+    font-size: 20px;
+    background-color: #12345678 !important;
+}

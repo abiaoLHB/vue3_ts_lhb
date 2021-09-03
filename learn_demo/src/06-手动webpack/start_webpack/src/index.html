@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <!-- <script src="./index.js"></script> -->
+    <!-- 直接使用报错的：Uncaught SyntaxError: Cannot use import statement outside a module
+ -->
+
+    <!-- webpack后，可以正常使用了 -->
+    <script src="../build/bundle.js">
+    </script>
+
+    <!-- 解决：利用webpack打包，打包后的都是浏览器可以识别的 -->
+</body>
+
+</html>
