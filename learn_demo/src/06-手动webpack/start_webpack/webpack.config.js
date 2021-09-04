@@ -12,7 +12,11 @@ module.exports = {
         // __dirname:当前文件所在的绝对路径，也就是webpack.config.js的当前绝对路径
         path: path.resolve(__dirname, './build'),
         // 打包后文件名
-        filename: "bundle.js"
+        filename: "bundle.js",
+
+        // webpack5代替url-laoder和fileloader的输出也可以写在这里
+        // 表示通过asset模式打包后的文件名
+        assetModuleFilename:"images/[name]_[hash:8][ext]"
     },
     // 配置loader，三种方式
 
@@ -55,7 +59,79 @@ module.exports = {
                 // i是忽略大小写
                 test: /\.less$/i,
                 use: ["style-loader", "css-loader", "less-loader"]
+            },
+            //处理图片 
+            // {
+            //     // test:/\.(png|jpeg|jpg|gif|svg)$/,
+            //     // 问号表示问号前面的字符有0个或者1个
+            //     test:/\.(png|jpe?g|gif|svg)$/,
+
+            //     // use:["file-loader"],
+
+            //     // 文件命名规则 通过placehoder完成，webpack提供了大量的placehoder，来显示不同的内容
+            //     // [ext] 处理文件的扩展名
+            //     // [name] 处理文件的原名称
+            //     // [hash] 文件内容使用MD4散列函数处理，生成一个128位hash值
+            //     // [contentHash],和hash基本一致
+            //     // [hash:<lenght>]截取hash长度
+            //     // [path] 相对于webpakc配置文件的路径，用的少
+               
+            //     use:{
+            //         // loader:"file-loader",
+            //         // options:{
+            //         //     // 打包时，输出到打包目录里的img文件夹下，这个目录可以不写
+            //         //     // 而是写到name属性里
+            //         //     // outputPath:'img',
+
+            //         //     // 输出图片的名字
+            //         //     // [name]:取原先的名字
+            //         //     // [hash:8]：设置8位hash值
+            //         //     // 下划线知识用来做个区分，加不加都行的
+            //         //     // [ext],extension的缩写，表示使用原来的扩展名
+            //         //     name:'images/[name]_[hash:8].[ext]'
+            //         // }
+
+            //         // 安装了url-loader后，可以只用url-loader了。新版url-loader已默认打包的js里
+            //         loader:"url-loader",
+            //         options:{
+            //             // 打包时，输出到打包目录里的img文件夹下，这个目录可以不写
+            //             // 而是写到name属性里
+            //             // outputPath:'img',
+
+            //             // 输出图片的名字
+            //             // [name]:取原先的名字
+            //             // [hash:8]：设置8位hash值
+            //             // 下划线知识用来做个区分，加不加都行的
+            //             // [ext],extension的缩写，表示使用原来的扩展名
+            //             name:'images/[name]_[hash:8].[ext]',
+            //             // 阈值：大于多少kb打包到dist里，小于的话，直接转成base64
+            //             // 这里要严格控制，阀值太高的话，bunld.js会很大，导致下载bunld.js缓慢
+            //             limit: 3*1024
+            //         }
+
+            //     }
+            // },
+
+            // 处理图片，使用webpack5 资源模块类型
+            {
+                test:/\.(png|jpeg|jpg|svg|png)$/,
+                // type:'asset/resource',//对应file-loader,全部打包，图片名一大串
+
+                // 常用，一下配置相当于url-loader
+                type:"asset",
+                
+                // 也可以写最上面
+                // generator:{
+                //     filename:"images/[name]_[hash:8][ext]"//[ext]包含点，不需要再写点
+                // },
+                parser:{
+                    dataUrlCondition:{
+                        maxSize:2*1024
+                    }
+                }
             }
+
+
         ]
     }
 
