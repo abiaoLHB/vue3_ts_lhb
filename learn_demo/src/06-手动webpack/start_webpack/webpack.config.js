@@ -1,7 +1,20 @@
 const path = require('path')
+// 导入 导入的是个类，使用时需要实例化一个对象
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+// 插件不同，导入方式有差别
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+
+const { DefinePlugin } = require("webpack")
+
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 // webpack是在node环境下运行的，所以必须写commonsjs规范
 module.exports = {
+    // 用什么模式打包：开发，不压缩，eval模式。否则 压缩成一行
+    // 配置了mode，就默认配置了一大堆东西
+    mode:'development',
+    // 同时生成一份map文件，映射打包后的代码，可方便定位错误
+    devtool:'source-map',
     entry: "./src/main.js",
     output: {
         // path:'必须是绝对路径'
@@ -12,11 +25,13 @@ module.exports = {
         // __dirname:当前文件所在的绝对路径，也就是webpack.config.js的当前绝对路径
         path: path.resolve(__dirname, './build'),
         // 打包后文件名
-        filename: "bundle.js",
+        // filename: "bundle.js",
+        // 放到某个目录下也行
+        filename: "js/bundle.js",
 
         // webpack5代替url-laoder和fileloader的输出也可以写在这里
         // 表示通过asset模式打包后的文件名
-        assetModuleFilename:"images/[name]_[hash:8][ext]"
+        assetModuleFilename: "images/[name]_[hash:8][ext]"
     },
     // 配置loader，三种方式
 
@@ -75,7 +90,7 @@ module.exports = {
             //     // [contentHash],和hash基本一致
             //     // [hash:<lenght>]截取hash长度
             //     // [path] 相对于webpakc配置文件的路径，用的少
-               
+
             //     use:{
             //         // loader:"file-loader",
             //         // options:{
@@ -114,25 +129,79 @@ module.exports = {
 
             // 处理图片，使用webpack5 资源模块类型
             {
-                test:/\.(png|jpeg|jpg|svg|png)$/,
+                test: /\.(png|jpeg|jpg|svg|png)$/,
                 // type:'asset/resource',//对应file-loader,全部打包，图片名一大串
 
                 // 常用，一下配置相当于url-loader
-                type:"asset",
-                
+                type: "asset",
+
                 // 也可以写最上面
                 // generator:{
                 //     filename:"images/[name]_[hash:8][ext]"//[ext]包含点，不需要再写点
                 // },
-                parser:{
-                    dataUrlCondition:{
-                        maxSize:2*1024
+                parser: {
+                    dataUrlCondition: {
+                        maxSize: 2 * 1024
                     }
                 }
+            },
+            {
+                test: /\.(eot|ttf|woff2?)$/,
+                // use:{
+                //     loader:"file-loader",
+                //     options:{
+                //         // outputPath:"font",
+                //         name:'font/[name]_[hash:8].[ext]'
+                //     }
+                // },
+                // webpack asset模式
+                type: "asset/resource", //使用file-loader模式
+                generator: {
+                    filename: "font/[name]_[hash:8][ext]"//[ext]包含点，不需要再写点
+                },
             }
 
 
         ]
-    }
+    },
+    // 插件运行和写的顺序没关系，和hooks有关系
+    plugins: [
+        // 一个个的插件对象，实例化一个对象.根据output路径来删文件
+        new CleanWebpackPlugin(),
+
+        //    默认用法，生成简单的html、
+        //    new HtmlWebpackPlugin()
+
+        // 使用指定的html当做模板。需要使用definePlugin，它是webpack自带的
+        // 这个模版是用来指定生成的，不是复制过去的
+        new HtmlWebpackPlugin({
+            template: './public/index.html',
+            // 设置html标题
+            title:"vue3_lhb"
+        }),
+
+        new DefinePlugin({
+            // EJS语法
+            // 定一个变量，在模板index.html里使用，给一个字符串路径就行
+            BASE_URL:"'./'"
+        }),
+        new CopyWebpackPlugin({
+            // 匹配,从哪复制到那
+            patterns:[
+                {
+                    from:'public',
+                    // to:'./abc',//一般不写
+                    // to:'./',//一般不写
+                    globOptions:{
+                        // 忽略哪些文件
+                        ignore:[
+                            // 忽略当前文件夹下所有index.html文件不复制
+                            "**/index.html"
+                        ]
+                    }
+                },
+            ]
+        })
+    ]
 
 }

@@ -1,6 +1,7 @@
 import '../css/style.css'
 import '../css/title.less'
 import '../css/img.css'
+import '../font/iconfont.css'
 
 import bgimg from "../img/bg.jpg"
 
@@ -11,6 +12,7 @@ document.body.appendChild(divEl)
 
 // const bgDivEl = document.createElement("div")
 // bgDivEl.className="image-bg"
+// document.body.appendChild(bgDivEl)
 
 const imgEl = document.createElement('img')
 // 这个路径是相对于 index.html所在路径来找的 ！！！！！！！！
@@ -20,4 +22,8 @@ const imgEl = document.createElement('img')
 imgEl.src = bgimg 
 document.body.appendChild(imgEl)
 
-document.body.appendChild(bgDivEl)
+const iEl = document.createElement("i")
+iEl.className = "iconfont icon-ashbin"
+
+console.log(iEl)
+document.body.appendChild(iEl)

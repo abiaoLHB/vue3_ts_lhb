@@ -56,20 +56,20 @@
         // 使用局部webpack方式3 - 使用packjson的脚本执行打包命令，使用脚本时，就不需要使用npx了，会自动
         // 去node_moduls里找执行命令，使用的也是局部
         // 比如:"scripts": {
-                        // "tet": "echo \"Error: no test specified\" && exit 1",
-                        // "build": "webpack"
-                     //   },
-            // 执行脚本 ：npm run build
+        // "tet": "echo \"Error: no test specified\" && exit 1",
+        // "build": "webpack"
+        //   },
+        // 执行脚本 ：npm run build
 
 
         // 默认打包过程：在当前目录下，默认知道src目录里的index.js当做入口，然后递归
         // 找到里面的依赖去打包。测试：把index.js改成main.js,就会报一堆错误 Can't resolve './src' in
         // 如果不想按默认打包，可以在打包指令中加入入口命令  npx webpack --entry ./src/main.js  可以打包成功
         // 如果不想按默认打包，可以在打包指令中加入入口、出口命令  npx webpack --entry ./src/main.js --output-path ./build  可以打包成功
-    
+
         // 不想用npx了，命令太长，可以用npm run ,把参数写到脚本里
         // 这样写还是鸡肋，真实开发，是在项目根目录下用webpack.config.js文件做配置，自动读取，文件名是固定的，非得起其他名字，需要特殊指定
-        
+
         // 如果不适用默认文件名字，比如webpack.config.js -》lhb.config.js ,需要再脚本命令里指定
         //  "build": "webpack --config lhb.config.js"
 
@@ -100,9 +100,72 @@
         // 可以帮我们进行css的转换和适配，比如自动添加浏览器前缀、css样式的重置
         // 可以单独使用，可以安装loader。单独使用略
         // npm install postcss-loader -D
-        
+
         // 用postcss-preset-env 代替autoprefixer 
         // npm install postcss-preset-env -D
+
+        // 处理图片 npm install file-loader -D  //webpack5已经不推荐使用file-loader和url-loader了
+        // 使用图片方式1 ：css使用，导入css
+        // 使用图片方式2 ：设置img的src
+
+        // const imgEl = document.createElement('img')
+        // 这个路径是相对于 index.html所在路径来找的 ！！！！！！！！
+        // 这样使用 压根 就没有打包这个图片。因为这里是直接给img赋值了一个字符串，不一定能找到
+        // 真正的资源位置，需要导入进来使用。当成一个模块去使用
+        // imgEl.src ="../img/bg.png" 
+        // imgEl.src = bgimg 
+
+
+        // 这是通过这两项配置生成的图片 。。 太丑了，非常乱
+        // {
+        //     test:/\.(png|jpe?g|gif|svg)$/,
+        //     use:["file-loader"]
+        // }
+        // afc31a7ef516894348b5385a808a6bd8.jpg
+
+        // 优化图片webpack配置
+        // use: {
+        //     loader: "file-loader",
+        //         options: {
+        //         // 打包时，输出到打包目录里的img文件夹下，这个目录可以不写
+        //         // 而是写到name属性里
+        //         // outputPath:'img',
+
+        //         // 输出图片的名字
+        //         // [name]:取原先的名字
+        //         // [hash:8]：设置8位hash值
+        //         // 下划线知识用来做个区分，加不加都行的
+        //         // [ext],extension的缩写，表示使用原来的扩展名
+        //         name: 'images/[name]_[hash:8].[ext]'
+        //     }
+        // }
+        // 只使用file-loader时，所有图片都会打包成单独的图片
+
+        // url-loader 和file-loader基本一致，可以将小于阈值的图片打包成base64的形式嵌入到js里
+        // 减少图片请求数，是一种优化
+        // npm install url-loader -D
+
+        // webpack5之前，加载资源需要使用各种loader
+        // webpack5,可以不用这些loader了，而是直接使用asset module type(资源模块类型)，代替上面的loader
+
+        // plugins- 插件
+        // loader是用于特定的模块类型进行转换
+        // plugin可以用于执行更加广泛的任务，比如打包优化，资源管理，环境变量注入等
+        // 自动删除dist文件夹 
+        // npm install clean-webpack-plugn 
+
+        // 打包index.html，如果没打包这个，dist文件夹没有index。html，部署了也没法访问啊。。
+        // npm install html-webpack-plugin -D
+        // 安装了这插件，可以没有根目录下的index.html
+
+        // pulic文件里的文件会被复制到dist里
+
+
+        // 比如只复制pulic里的fiviteicon 而不复制html，可以使用copy-webpack-plugin
+        // npm install copy-webpack-plugin -D
+
+        // 以上打包方式，css、base64的图片 都在bundle.js里面导致bundle.js很大
+
     </script>
 </body>
 
