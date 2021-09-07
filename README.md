@@ -1,10 +1,10 @@
 ## 1、邂逅体验Vue3和Vue3源码 √
 ## 2、Vue3模板语法常见的指令 √
-## 3、条件-列表渲染-diff算法-key
-## 4、计算属性-watch-综合案例
-## 5、(掌握)v-model和注册Vue组件
-## 6、webpack基础打包和css打包
-## 7、webpack打包其他资源和插件使用
+## 3、条件-列表渲染-diff算法-key √
+## 4、计算属性-watch-综合案例 √
+## 5、(掌握)v-model和注册Vue组件 √
+## 6、webpack基础打包和css打包 √
+## 7、webpack打包其他资源和插件使用 √
 ## 8、Babel解析和Vue文件打包
 ## 9、devServer-resolve-环境分离
 ## 10、VueCLI和Vite的使用和原理
