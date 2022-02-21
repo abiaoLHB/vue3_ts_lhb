@@ -1,7 +1,7 @@
 const path = require('path')
-// 导入 导入的是个类，使用时需要实例化一个对象
+// 导入 导入的是个类，使用时需要实例化一个对象,自动删除dist文件夹
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-// 插件不同，导入方式有差别
+// 插件不同，导入方式有差别，在dist文件件里生成html文件
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const { DefinePlugin } = require("webpack")
